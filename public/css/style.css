@@ -1,0 +1,923 @@
+/* ========================================
+   GLOBAL STYLES & RESET
+   ======================================== */
+
+/* Base body styling with flex layout for sticky footer */
+body {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main container with flexible growth */
+.container {
+    flex: 1 0 auto;
+    padding: 2rem;
+}
+
+/* Global smooth transitions for interactive elements */
+* {
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, 
+                transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ========================================
+   NAVIGATION BAR STYLES
+   ======================================== */
+
+/* Main navbar container */
+.navbar {
+    height: 5rem;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 0.5rem 2rem;
+    transition: box-shadow 0.2s ease;
+}
+
+/* Brand icon styling */
+.fa-compass-drafting {
+    font-size: 2rem;
+    color: #fe424d;
+    margin-right: 0.5rem;
+}
+
+/* Navigation links */
+.nav-link {
+    color: #222 !important;
+    font-weight: 500;
+    margin: 0 0.75rem;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover, 
+.nav-link.active {
+    color: #fe424d !important;
+    text-decoration: underline;
+}
+
+/* Mobile navbar toggler */
+.navbar-toggler {
+    border: none;
+    background: transparent;
+    font-size: 1.25rem;
+}
+
+/* Navbar responsive design */
+@media (max-width: 768px) {
+    .navbar {
+        margin: 0;
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+    }
+    
+    .navbar-nav {
+        padding-top: 0.5rem;
+    }
+}
+
+/* ========================================
+   FOOTER STYLES
+   ======================================== */
+
+/* Main footer container */
+.footer-info {
+    background: linear-gradient(to right, #2d3436, #353b48);
+    padding: 2rem 0;
+    text-align: center;
+    color: #f5f6fa;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Social media icons container */
+.footer-info-socials {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+/* Social media icons */
+.footer-info-socials i {
+    font-size: 1.5rem;
+    color: #f5f6fa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Individual social media hover colors */
+.footer-info-socials i.fa-facebook:hover {
+    color: #1877f2; /* Facebook blue */
+}
+
+.footer-info-socials i.fa-instagram:hover {
+    color: #e4405f; /* Instagram pink */
+}
+
+.footer-info-socials i.fa-github:hover {
+    color: #333; /* GitHub dark gray */
+}
+
+.footer-info-socials i.fa-twitter:hover {
+    color: #1da1f2; /* Twitter blue */
+}
+
+.footer-info-socials i.fa-linkedin:hover {
+    color: #0077b5; /* LinkedIn blue */
+}
+
+/* Footer links container */
+.footer-info-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1rem 0;
+}
+
+/* Footer link styling */
+.footer-info-links a {
+    color: #f5f6fa;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.footer-info-links a:hover {
+    color: #fe424d;
+}
+
+/* ========================================
+   TYPOGRAPHY STYLES
+   ======================================== */
+
+/* Main heading styles with decorative underline */
+h3 {
+    color: #2d3436;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 2rem 0;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+/* Decorative underline for headings */
+h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 60px;
+    height: 4px;
+    background: #fe424d;
+    border-radius: 2px;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+    h3 {
+        font-size: 1.4rem;
+        margin: 1.5rem 0;
+    }
+}
+
+/* ========================================
+   CARD COMPONENTS
+   ======================================== */
+
+/* Base card styling */
+.card {
+    border: none !important;
+    margin-bottom: 2rem;
+    transition: transform 0.2s ease;
+}
+
+/* Listing card container */
+.listing-card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Listing card hover effects */
+.listing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Card image wrapper with aspect ratio */
+.card-img-wrapper {
+    position: relative;
+    padding-top: 66.67%; /* 3:2 Aspect Ratio */
+    overflow: hidden;
+}
+
+/* Card image styling */
+.card-img-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 1rem !important;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* Card overlay for hover effects */
+.card-img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+/* Overlay content styling */
+.overlay-content {
+    text-align: center;
+    color: white;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.overlay-content i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.overlay-content p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+/* Card hover effects */
+.listing-card:hover .card-img-overlay {
+    opacity: 1;
+}
+
+.listing-card:hover .overlay-content {
+    transform: translateY(0);
+}
+
+.listing-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Card body and text */
+.card-body {
+    padding: 1.25rem;
+    background-color: white;
+}
+
+.card-text {
+    padding: 1.25rem;
+    background-color: white;
+}
+
+/* Card title and price */
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2d3436;
+}
+
+.card-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fe424d;
+    margin-bottom: 0;
+}
+
+/* Card link styling */
+.listing-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Card responsive design */
+@media (max-width: 768px) {
+    .listing-card {
+        margin-bottom: 1rem;
+    }
+    
+    .card-title {
+        font-size: 1rem;
+    }
+    
+    .card-price {
+        font-size: 1.1rem;
+    }
+    
+    .overlay-content i {
+        font-size: 1.5rem;
+    }
+    
+    .overlay-content p {
+        font-size: 1rem;
+    }
+}
+
+/* ========================================
+   BUTTON COMPONENTS
+   ======================================== */
+
+/* Primary add button */
+.add-btn {
+    background: linear-gradient(to right, #fe424d, #ff6b6b);
+    color: white;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(254, 66, 77, 0.2);
+}
+
+.add-btn:hover {
+    background: linear-gradient(to right, #ff6b6b, #fe424d);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(254, 66, 77, 0.3);
+}
+
+.add-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(254, 66, 77, 0.2);
+}
+
+/* Detail page buttons */
+.detail-btn {
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Edit button styling */
+.detail-btn-edit {
+    background-color: #0984e3;
+    color: white;
+}
+
+.detail-btn-edit:hover {
+    background-color: #0772c5;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(9, 132, 227, 0.3);
+}
+
+/* Delete button styling */
+.detail-btn-delete {
+    background-color: #fe424d;
+    color: white;
+}
+
+.detail-btn-delete:hover {
+    background-color: #fd2935;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(254, 66, 77, 0.3);
+}
+
+/* Button shine effect */
+.detail-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.detail-btn:hover::before {
+    left: 100%;
+}
+
+/* Button container */
+.detail-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Button responsive design */
+@media (max-width: 768px) {
+    .detail-buttons {
+        flex-direction: column;
+    }
+    
+    .detail-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ========================================
+   FORM COMPONENTS
+   ======================================== */
+
+/* Form group container */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+/* Form control styling */
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid #cacaca;
+    border-radius: 0.5rem;
+    background-color: white;
+    transition: all 0.3s ease;
+    color: #2d3436;
+}
+
+.form-control:hover {
+    border-color: #fe424d;
+    box-shadow: 0 0 0 4px rgba(254, 66, 77, 0.1);
+}
+
+.form-control:focus {
+    border-color: #fe424d;
+    box-shadow: 0 0 0 4px rgba(254, 66, 77, 0.1);
+    outline: none;
+}
+
+/* Floating label styling */
+.form-label {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    padding: 0 0.25rem;
+    color: #64748b;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: white;
+    pointer-events: none;
+    transform-origin: 0 0;
+}
+
+/* Active/focused label state */
+.form-control:focus ~ .form-label,
+.form-control:not(:placeholder-shown) ~ .form-label {
+    transform: translateY(-1.4rem) scale(0.85);
+    color: #fe424d;
+    font-weight: 500;
+}
+
+/* Textarea specific styling */
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+textarea.form-control ~ .form-label {
+    background-color: white;
+}
+
+/* Number input styling */
+input[type="number"].form-control {
+    -moz-appearance: textfield;
+}
+
+input[type="number"].form-control::-webkit-outer-spin-button,
+input[type="number"].form-control::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Required field indicator */
+.form-control:required ~ .form-label::after {
+    content: "*";
+    color: #fe424d;
+    margin-left: 0.25rem;
+}
+
+/* ========================================
+   DETAIL PAGE STYLES
+   ======================================== */
+
+/* Main detail card */
+.detail-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 2rem 0;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Detail image container */
+.detail-img-container {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+/* Detail image styling */
+.detail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.detail-card:hover .detail-img {
+    transform: scale(1.02);
+}
+
+/* Detail content area */
+.detail-content {
+    padding: 2.5rem;
+}
+
+/* Detail title */
+.detail-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3436;
+    margin-bottom: 1.5rem;
+}
+
+/* Detail description */
+.detail-description {
+    font-size: 1.1rem;
+    color: #636e72;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+/* Detail information section */
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #f8f9fa;
+    padding: 1rem 0.5rem;
+    border-radius: 12px;
+    margin-top: 2rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    gap: 1rem;
+}
+
+.detail-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Detail price styling */
+.detail-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #e74c3c;
+}
+
+.price-amount {
+    margin-left: 0.25rem;
+}
+
+/* Detail location styling */
+.detail-location {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #555;
+    font-size: 1rem;
+}
+
+/* Detail page responsive design */
+@media (max-width: 768px) {
+    .detail-img-container {
+        height: 300px;
+    }
+    
+    .detail-content {
+        padding: 1.5rem;
+    }
+    
+    .detail-title {
+        font-size: 1.8rem;
+    }
+    
+    .detail-info {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* ========================================
+   MODAL COMPONENTS
+   ======================================== */
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal container */
+.modal-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 480px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: hidden;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.show .modal-container {
+    transform: scale(1) translateY(0);
+}
+
+/* Modal header */
+.modal-header {
+    padding: 2rem 2rem 1rem;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+/* Modal icon with pulse animation */
+.modal-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #ff6b6b, #fe424d);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    animation: pulse 2s infinite;
+}
+
+.modal-icon i {
+    font-size: 1.8rem;
+    color: white;
+}
+
+/* Pulse animation for modal icon */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(254, 66, 77, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 20px rgba(254, 66, 77, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(254, 66, 77, 0);
+    }
+}
+
+/* Modal title */
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d3436;
+    margin: 0;
+}
+
+/* Modal close button */
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #636e72;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    background: #f8f9fa;
+    color: #2d3436;
+    transform: rotate(90deg);
+}
+
+/* Modal body */
+.modal-body {
+    padding: 1rem 2rem 2rem;
+    text-align: center;
+}
+
+/* Modal message text */
+.modal-message {
+    font-size: 1.1rem;
+    color: #2d3436;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* Modal warning text */
+.modal-warning {
+    font-size: 0.95rem;
+    color: #636e72;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Modal footer */
+.modal-footer {
+    padding: 1rem 2rem 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Modal buttons */
+.modal-btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    min-width: 120px;
+    justify-content: center;
+}
+
+/* Cancel button styling */
+.modal-btn-cancel {
+    background: #f8f9fa;
+    color: #636e72;
+    border: 2px solid #e9ecef;
+}
+
+.modal-btn-cancel:hover {
+    background: #e9ecef;
+    color: #495057;
+    transform: translateY(-1px);
+}
+
+/* Delete confirmation button */
+.modal-btn-delete {
+    background: linear-gradient(135deg, #fe424d, #ff6b6b);
+    color: white;
+    box-shadow: 0 4px 15px rgba(254, 66, 77, 0.3);
+}
+
+.modal-btn-delete:hover {
+    background: linear-gradient(135deg, #fd2935, #fe424d);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(254, 66, 77, 0.4);
+}
+
+.modal-btn-delete:active {
+    transform: translateY(0);
+}
+
+/* Loading state for delete button */
+.modal-btn-delete.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.modal-btn-delete.loading i {
+    animation: spin 1s linear infinite;
+}
+
+/* Modal responsive design */
+@media (max-width: 768px) {
+    .modal-container {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .modal-header {
+        padding: 1.5rem 1.5rem 1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem 1.5rem;
+    }
+    
+    .modal-footer {
+        padding: 1rem 1.5rem 1.5rem;
+        flex-direction: column;
+    }
+    
+    .modal-btn {
+        width: 100%;
+    }
+    
+    .modal-icon {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .modal-icon i {
+        font-size: 1.5rem;
+    }
+    
+    .modal-title {
+        font-size: 1.3rem;
+    }
+}
+
+/* ========================================
+   ANIMATIONS & KEYFRAMES
+   ======================================== */
+
+/* Fade in up animation for cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Spinner animation for loading states */
+@keyframes spin {
+    from { 
+        transform: rotate(0deg); 
+    }
+    to { 
+        transform: rotate(360deg); 
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Smooth transitions for all elements */
+.detail-title,
+.detail-description,
+.detail-info,
+.detail-buttons {
+    transition: all 0.3s ease;
+}
+
+/* Loading spinner class */
+.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* Enhanced focus styles for accessibility */
+.detail-btn:focus,
+.modal-btn:focus {
+    outline: 2px solid #fe424d;
+    outline-offset: 2px;
+}

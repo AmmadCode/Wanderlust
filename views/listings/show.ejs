@@ -1,0 +1,89 @@
+<% layout('layouts/boilerplate') %>
+
+  <body>
+    <div class="containerss">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+          <div class="detail-card">
+            <!-- Listing Image -->
+            <div class="detail-img-container">
+              <img src="<%= listing.image.url %>" class="detail-img" alt="<%= listing.title %>" />
+            </div>
+
+            <!-- Listing Content -->
+            <div class="detail-content">
+              <!-- Title -->
+              <h2 class="detail-title">
+                <%= listing.title.trim() %>
+              </h2>
+
+              <!-- Description -->
+              <p class="detail-description">
+                <%= listing.description.trim() %>
+              </p>
+
+              <!-- Info: Price & Location -->
+              <div class="detail-info">
+                <div class="detail-price">
+                  <span class="price-amount">
+                    <%= listing.price.toLocaleString("en-US", {style: "currency" , currency: "USD" }) %>
+                  </span>
+                </div>
+                <div class="detail-location">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <span>
+                    <%= listing.location %>, <%= listing.country %>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="detail-buttons">
+                <a href="/listings/<%= listing._id %>/edit" class="detail-btn detail-btn-edit">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+
+                <form class="d-inline" action="/listings/<%= listing._id %>?_method=DELETE" method="POST"
+                  id="deleteForm">
+                  <button type="button" class="detail-btn detail-btn-delete" id="deleteBtn">
+                    <i class="fa-solid fa-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+      <div class="modal-container">
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <h3 class="modal-title">Delete Listing</h3>
+          <button class="modal-close" id="closeModal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-message">Are you sure you want to delete "<%= listing.title %>"?</p>
+          <p class="modal-warning">This action cannot be undone and will permanently remove this listing.</p>
+        </div>
+        <div class="modal-footer">
+          <button id="cancelDelete" class="modal-btn modal-btn-cancel">
+            <i class="fa-solid fa-xmark"></i>
+            Cancel
+          </button>
+          <button id="confirmDelete" class="modal-btn modal-btn-delete">
+            <i class="fa-solid fa-trash"></i>
+            Delete Listing
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./public/javaScript/deleteMessage.js"></script>
+  </body>
