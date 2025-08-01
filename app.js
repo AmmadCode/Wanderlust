@@ -3,9 +3,12 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
+const { listingSchema } = require("./schema.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const wrapAsync = require('./utils/wrapAsync');
+const ExpressError = require('./utils/ExpressError');
 
 
 app.set("view engine", "ejs");
@@ -30,6 +33,23 @@ mongoose.connect(connectionString)
     console.error('Error connecting to MongoDB Atlas:', error);
   });
 
+// Validate Listing
+const validateListing = (req, res, next) => {
+  // Validate request body using Joi schema
+  const { error } = listingSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map(el => el.message).join(', ');
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+
+}
+
+
+
+
+
 
 // Root Route
 app.get("/", (req, res) => {
@@ -39,10 +59,10 @@ app.get("/", (req, res) => {
 // Listings Routes
 
 // Index Route
-app.get("/listings", async (req, res) => {
+app.get("/listings", wrapAsync(async (req, res) => {
   const allListings = await Listing.find({});
   res.render("listings/index.ejs", { allListings })
-});
+}));
 
 // New Route (GET for form)
 app.get("/listings/new", (req, res) => {
@@ -50,77 +70,75 @@ app.get("/listings/new", (req, res) => {
 })
 
 // Show Route
-app.get("/listings/:id", async (req, res) => {
+app.get("/listings/:id", wrapAsync(async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   res.render("listings/show.ejs", { listing });
-});
+}));
 
 // Create Route (POST)
-app.post("/listings", async (req, res) => {
+app.post("/listings", validateListing, wrapAsync(async (req, res, next) => {
+
+  // Create a new listing instance and save it to the database
   const newListing = new Listing(req.body.listing);
   await newListing.save();
   console.log("New Listing Created");
   res.redirect("/listings");
-});
+
+}));
 
 // Edit Route (GET for form)
-app.get("/listings/:id/edit", async (req, res) => {
+app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   res.render("listings/edit.ejs", { listing });
-});
+}));
 
 // Update Route (PUT)
-app.put("/listings/:id", async (req, res) => {
+app.put("/listings/:id", validateListing, wrapAsync(async (req, res) => {
+  // Find the listing by ID and update it with the new data
   const { id } = req.params;
   const updatedListing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }, { new: true });
   console.log("Listing Updated");
   res.redirect(`/listings/${id}`);
-});
+}));
 
 // Delete Route (DELETE)
 
-app.delete("/listings/:id", async (req,res) => {
-  const {id } = req.params;
+app.delete("/listings/:id", wrapAsync(async (req, res) => {
+  const { id } = req.params;
   await Listing.findByIdAndDelete(id);
   console.log("Listing Deleted");
   res.redirect("/listings");
+}));
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.use((req, res, next) => {
+  next(new ExpressError("Page Not Found!", 404));
 })
 
 
 
 
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  let { statusCode = 500, message = "Something went wrong!" } = err;
+  // res.status(statusCode).send(message);
 
+  res.status(statusCode).render("listings/error.ejs", { message });
 
-// app.get("/testlisting", async(req,res) => {
-//     const sampleListing = new Listing({
-//         title: "My new villa",
-//         description: "This is my new villa",
-//         price: 1200,
-//         location: "Lahore",
-//         country: "Pakistan"
-//     });
-
-//     await sampleListing.save();
-//     console.log("Listing Saved")
-//     res.send("Listing Saved");
-
-// }) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+})
 
 
 
