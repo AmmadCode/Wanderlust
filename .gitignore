@@ -47,5 +47,4 @@ jspm_packages/
 .env.test.local
 .env.production.local
 
-# Study resources
-PROJECT_STUDY_NOTES.md
+
