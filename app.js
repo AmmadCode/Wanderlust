@@ -35,8 +35,11 @@ mongoose.connect(connectionString)
 
 // Validate Listing
 const validateListing = (req, res, next) => {
-  // Validate request body using Joi schema
-  const { error } = listingSchema.validate(req.body);
+  // Validate request body using Joi schema (with type coercion enabled for price field)
+  const { error } = listingSchema.validate(req.body, {
+    allowUnknown: false,  // Don't allow unknown fields
+    stripUnknown: false   // Don't strip unknown fields, show error instead
+  });
   if (error) {
     const msg = error.details.map(el => el.message).join(', ');
     throw new ExpressError(msg, 400);

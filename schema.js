@@ -53,10 +53,25 @@ const listingSchema = Joi.object({
             .trim()
             .min(1)
             .max(100)
+            .pattern(/^[a-zA-Z\s\-',\.]+$/)
+            .custom((value, helpers) => {
+                // Additional check: reject if it's purely numeric (even as string)
+                if (/^\d+$/.test(value.trim())) {
+                    return helpers.error('location.numeric');
+                }
+                // Reject if it contains any digits
+                if (/\d/.test(value)) {
+                    return helpers.error('location.containsNumbers');
+                }
+                return value;
+            })
             .messages({
                 'string.empty': 'Location is required',
                 'string.min': 'Location must not be empty',
                 'string.max': 'Location must be less than 100 characters',
+                'string.pattern.base': 'Location must contain only letters, spaces, hyphens, apostrophes, commas, and periods',
+                'location.numeric': 'Location cannot be just numbers',
+                'location.containsNumbers': 'Location cannot contain any numbers',
                 'any.required': 'Location is required'
             }),
 
@@ -65,10 +80,25 @@ const listingSchema = Joi.object({
             .trim()
             .min(1)
             .max(100)
+            .pattern(/^[a-zA-Z\s\-',\.]+$/)
+            .custom((value, helpers) => {
+                // Additional check: reject if it's purely numeric (even as string)
+                if (/^\d+$/.test(value.trim())) {
+                    return helpers.error('country.numeric');
+                }
+                // Reject if it contains any digits
+                if (/\d/.test(value)) {
+                    return helpers.error('country.containsNumbers');
+                }
+                return value;
+            })
             .messages({
                 'string.empty': 'Country is required',
                 'string.min': 'Country must not be empty',
                 'string.max': 'Country must be less than 100 characters',
+                'string.pattern.base': 'Country must contain only letters, spaces, hyphens, apostrophes, commas, and periods',
+                'country.numeric': 'Country cannot be just numbers',
+                'country.containsNumbers': 'Country cannot contain any numbers',
                 'any.required': 'Country is required'
             })
     }).required()
