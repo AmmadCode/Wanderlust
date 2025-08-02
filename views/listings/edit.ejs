@@ -12,10 +12,14 @@
             id="title"
             name="listing[title]"
             value="<%= listing.title %>"
+            minlength="1"
+            maxlength="100"
+            pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s\-',\.#\/&!()]+$"
+            title="Title must describe the property and contain at least some letters (e.g., '2-Bedroom Apartment', 'Luxury Villa')"
             required
           />
           <div class="valid-feedback">Title Looks good!</div>
-          <div class="invalid-feedback">Please Enter a Title</div>
+          <div class="invalid-feedback">Title must describe the property and contain at least some letters</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
@@ -23,24 +27,29 @@
             class="form-control"
             id="description"
             name="listing[description]"
+            minlength="1"
+            maxlength="1000"
+            title="Description must be between 1 and 1000 characters"
             required
           ><%= listing.description.trim() %></textarea>
           <div class="valid-feedback">Description Looks good!</div>
-          <div class="invalid-feedback">Please Enter a Description</div>
+          <div class="invalid-feedback">Description must be between 1 and 1000 characters</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image URL</label>
           <input
-            type="text"
+            type="url"
             class="form-control"
             id="image"
             name="listing[image][url]"
             value="<%= listing.image.url %>"
             placeholder="Optional"
+            pattern="https?://.+"
+            title="Please enter a valid URL starting with http:// or https://"
             required
           />
           <div class="valid-feedback">Image URL Looks good!</div>
-          <div class="invalid-feedback">Please Enter a Valid Image URL</div>
+          <div class="invalid-feedback">Please enter a valid URL starting with http:// or https://</div>
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">
@@ -51,10 +60,14 @@
               id="price"
               name="listing[price]"
               value="<%= listing.price %>"
+              min="0.01"
+              step="0.01"
+              pattern="^\d+(\.\d{1,2})?$"
+              title="Price must be a positive number (e.g., 25.99)"
               required
             />
             <div class="valid-feedback">Price Looks good!</div>
-            <div class="invalid-feedback">Please Enter a Valid Price</div>
+            <div class="invalid-feedback">Price must be a positive number (e.g., 25.99)</div>
           </div>
           <div class="mb-3 col-md-8">
             <label for="location" class="form-label">Location</label>
@@ -64,12 +77,12 @@
               id="location"
               name="listing[location]"
               value="<%= listing.location %>"
-              pattern="[a-zA-Z\s\-',\.]+"
-              title="Location must contain only letters, spaces, hyphens, apostrophes, commas, and periods"
+              pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s\-',\.#\/]+$"
+              title="Location can include numbers and letters (e.g., '123 Main St, Apt 5B') but cannot be just numbers"
               required
             />
             <div class="valid-feedback">Location Looks good!</div>
-            <div class="invalid-feedback">Location must contain only letters, spaces, hyphens, apostrophes, commas, and periods</div>
+            <div class="invalid-feedback">Location can include numbers and letters but cannot be just numbers</div>
           </div>
         </div>
 

@@ -8,10 +8,25 @@ const listingSchema = Joi.object({
             .trim()
             .min(1)
             .max(100)
+            .pattern(/^[a-zA-Z0-9\s\-',\.#\/&!()]+$/)
+            .custom((value, helpers) => {
+                // Reject if purely numeric
+                if (/^\d+$/.test(value.trim())) {
+                    return helpers.error('title.purelyNumeric');
+                }
+                // Must contain at least one letter
+                if (!/[a-zA-Z]/.test(value)) {
+                    return helpers.error('title.noLetters');
+                }
+                return value;
+            })
             .messages({
                 'string.empty': 'Title is required',
                 'string.min': 'Title must not be empty',
                 'string.max': 'Title must be less than 100 characters',
+                'string.pattern.base': 'Title can contain letters, numbers, spaces, and common punctuation',
+                'title.purelyNumeric': 'Title cannot be just numbers - must describe the property',
+                'title.noLetters': 'Title must contain at least some letters to describe the property',
                 'any.required': 'Title is required'
             }),
 
@@ -53,15 +68,15 @@ const listingSchema = Joi.object({
             .trim()
             .min(1)
             .max(100)
-            .pattern(/^[a-zA-Z\s\-',\.]+$/)
+            .pattern(/^[a-zA-Z0-9\s\-',\.#\/]+$/)
             .custom((value, helpers) => {
-                // Additional check: reject if it's purely numeric (even as string)
+                // Only reject if it's purely numeric (like "123" or "456")
                 if (/^\d+$/.test(value.trim())) {
-                    return helpers.error('location.numeric');
+                    return helpers.error('location.purelyNumeric');
                 }
-                // Reject if it contains any digits
-                if (/\d/.test(value)) {
-                    return helpers.error('location.containsNumbers');
+                // Must contain at least one letter
+                if (!/[a-zA-Z]/.test(value)) {
+                    return helpers.error('location.noLetters');
                 }
                 return value;
             })
@@ -69,9 +84,9 @@ const listingSchema = Joi.object({
                 'string.empty': 'Location is required',
                 'string.min': 'Location must not be empty',
                 'string.max': 'Location must be less than 100 characters',
-                'string.pattern.base': 'Location must contain only letters, spaces, hyphens, apostrophes, commas, and periods',
-                'location.numeric': 'Location cannot be just numbers',
-                'location.containsNumbers': 'Location cannot contain any numbers',
+                'string.pattern.base': 'Location can contain letters, numbers, spaces, hyphens, apostrophes, commas, periods, # and /',
+                'location.purelyNumeric': 'Location cannot be just numbers - must include street name or area',
+                'location.noLetters': 'Location must contain at least some letters',
                 'any.required': 'Location is required'
             }),
 
