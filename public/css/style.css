@@ -921,3 +921,142 @@ input[type="number"].form-control::-webkit-inner-spin-button {
     outline: 2px solid #fe424d;
     outline-offset: 2px;
 }
+
+/* ========================================
+   ENHANCED MODAL ANIMATIONS
+   ======================================== */
+
+/* Enhanced modal animations */
+.modal-container {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+}
+
+.modal-overlay.show .modal-container {
+  animation-name: modalEnter;
+}
+
+.modal-overlay:not(.show) .modal-container {
+  animation-name: modalExit;
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalExit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+}
+
+/* Loading button animation */
+.modal-btn-delete.loading {
+  background: linear-gradient(135deg, #c0392b, #e74c3c) !important;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.modal-btn-delete.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid transparent;
+  border-top: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  animation: buttonSpin 1s linear infinite;
+}
+
+@keyframes buttonSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Enhanced modal backdrop blur effect */
+.modal-overlay {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Smooth modal container entrance */
+.modal-overlay.show .modal-container {
+  animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalSlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(30px) rotateX(10deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.95) translateY(10px) rotateX(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotateX(0deg);
+  }
+}
+
+/* Enhanced button hover effects */
+.modal-btn-delete:not(.loading):hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(254, 66, 77, 0.4);
+}
+
+.modal-btn-cancel:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Pulse effect for modal icon */
+.modal-icon {
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(254, 66, 77, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(254, 66, 77, 0);
+  }
+}
+
+/* Smooth transitions for all modal elements */
+.modal-header,
+.modal-body,
+.modal-footer {
+  transition: all 0.3s ease;
+}
+
+/* Error state styling */
+.modal-btn-delete.error {
+  background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
