@@ -1,89 +1,189 @@
 <% layout('layouts/boilerplate') %>
 
-  <body>
-    <div class="containerss">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
-          <div class="detail-card">
-            <!-- Listing Image -->
-            <div class="detail-img-container">
-              <img src="<%= listing.image.url %>" class="detail-img" alt="<%= listing.title %>" />
+<body>
+  <div class="containerss">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+        <div class="detail-card">
+          <!-- Listing Image -->
+          <div class="detail-img-container">
+            <img
+              src="<%= listing.image.url %>"
+              class="detail-img"
+              alt="<%= listing.title %>"
+            />
+          </div>
+
+          <!-- Listing Content -->
+          <div class="detail-content">
+            <!-- Title -->
+            <h2 class="detail-title"><%= listing.title.trim() %></h2>
+
+            <!-- Description -->
+            <p class="detail-description"><%= listing.description.trim() %></p>
+
+            <!-- Info: Price & Location -->
+            <div class="detail-info">
+              <div class="detail-price">
+                <span class="price-amount">
+                  <%= listing.price.toLocaleString("en-US", {style: "currency" ,
+                  currency: "USD" }) %>
+                </span>
+              </div>
+              <div class="detail-location">
+                <i class="fa-solid fa-location-dot"></i>
+                <span> <%= listing.location %>, <%= listing.country %> </span>
+              </div>
             </div>
 
-            <!-- Listing Content -->
-            <div class="detail-content">
-              <!-- Title -->
-              <h2 class="detail-title">
-                <%= listing.title.trim() %>
-              </h2>
+            <!-- Action Buttons -->
+            <div class="detail-buttons">
+              <a
+                href="/listings/<%= listing._id %>/edit"
+                class="detail-btn detail-btn-edit"
+              >
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+              </a>
 
-              <!-- Description -->
-              <p class="detail-description">
-                <%= listing.description.trim() %>
-              </p>
+              <form
+                class="d-inline"
+                action="/listings/<%= listing._id %>?_method=DELETE"
+                method="POST"
+                id="deleteForm"
+              >
+                <button
+                  type="button"
+                  class="detail-btn detail-btn-delete"
+                  id="deleteBtn"
+                >
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-10 m-4">
+        <hr class="p-3" />
+        <h4 class="mb-4">Leave a Review</h4>
+        <form
+          action="/listings/<%= listing._id %>/reviews"
+          method="POST"
+          novalidate
+          class="needs-validation"
+        >
+          <div class="mb-4 mt-3">
+            <label for="rating">Rating</label>
+            <input
+              class="form-range"
+              value="3"
+              type="range"
+              name="review[rating]"
+              id="rating"
+              min="1"
+              max="5"
+            />
+          </div>
+          <div class="comment mb-4">
+            <label class="form-label" for="comment">Comment:</label>
+            <textarea
+              class="form-control"
+              name="review[comment]"
+              id="comment"
+              rows="4"
+              placeholder="Write your review here..."
+              required
+            ></textarea>
+            <div class="invalid-feedback">Please enter a comment.</div>
+          </div>
+          <div>
+            <button class="detail-btn detail-btn-edit" type="submit">
+              Submit
+            </button>
+          </div>
+        </form>
 
-              <!-- Info: Price & Location -->
-              <div class="detail-info">
-                <div class="detail-price">
-                  <span class="price-amount">
-                    <%= listing.price.toLocaleString("en-US", {style: "currency" , currency: "USD" }) %>
-                  </span>
+        <hr />
+        <h4 class="review-section-title fw-bold mb-3">All Reviews</h4>
+        <p class="text-muted mb-4"><%= listing.reviews.length %> reviews</p>
+
+        <% for(review of listing.reviews) { %>
+        <div class="card review-card mb-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center">
+                <div class="review-avatar">
+                  <i class="fa-solid fa-user"></i>
                 </div>
-                <div class="detail-location">
-                  <i class="fa-solid fa-location-dot"></i>
-                  <span>
-                    <%= listing.location %>, <%= listing.country %>
-                  </span>
+                <div class="ms-3">
+                  <h6 class="review-author mb-0">John Doe</h6>
+                  <div class="review-rating">
+                    <% for(let i = 0; i < review.rating; i++) { %>
+                      <i class="fa-solid fa-star"></i>
+                    <% } %>
+                    <% for(let i = review.rating; i < 5; i++) { %>
+                      <i class="fa-regular fa-star"></i>
+                    <% } %>
+                  </div>
                 </div>
               </div>
-
-              <!-- Action Buttons -->
-              <div class="detail-buttons">
-                <a href="/listings/<%= listing._id %>/edit" class="detail-btn detail-btn-edit">
-                  <i class="fa-solid fa-pen-to-square"></i> Edit
-                </a>
-
-                <form class="d-inline" action="/listings/<%= listing._id %>?_method=DELETE" method="POST"
-                  id="deleteForm">
-                  <button type="button" class="detail-btn detail-btn-delete" id="deleteBtn">
-                    <i class="fa-solid fa-trash"></i> Delete
+              <div class="d-flex align-items-center gap-3">
+                <small class="text-muted">
+                  <%= review.createdAt.toLocaleDateString("en-US", { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  }) %>
+                </small>
+                <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" 
+                      method="POST" 
+                      class="review-delete-form">
+                  <button class="btn-delete-review" type="submit">
+                    <i class="fa-solid fa-trash-can"></i>
                   </button>
                 </form>
               </div>
             </div>
+            <p class="review-comment mb-0"><%= review.comment %></p>
           </div>
         </div>
+        <% } %>
       </div>
     </div>
+  </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal-overlay" id="deleteModal">
-      <div class="modal-container">
-        <div class="modal-header">
-          <div class="modal-icon">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-          </div>
-          <h3 class="modal-title">Delete Listing</h3>
-          <button class="modal-close" id="closeModal">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
-        <div class="modal-body">
-          <p class="modal-message">Are you sure you want to delete "<%= listing.title %>"?</p>
-          <p class="modal-warning">This action cannot be undone and will permanently remove this listing.</p>
-        </div>
-        <div class="modal-footer">
-          <button id="cancelDelete" class="modal-btn modal-btn-cancel">
-            <i class="fa-solid fa-xmark"></i>
-            Cancel
-          </button>
-          <button id="confirmDelete" class="modal-btn modal-btn-delete">
-            <i class="fa-solid fa-trash"></i>
-            Delete Listing
-          </button>
-        </div>
+        <h3 class="modal-title">Delete Listing</h3>
+        <button class="modal-close" id="closeModal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-message">
+          Are you sure you want to delete "<%= listing.title %>"?
+        </p>
+        <p class="modal-warning">
+          This action cannot be undone and will permanently remove this listing.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelDelete" class="modal-btn modal-btn-cancel">
+          <i class="fa-solid fa-xmark"></i>
+          Cancel
+        </button>
+        <button id="confirmDelete" class="modal-btn modal-btn-delete">
+          <i class="fa-solid fa-trash"></i>
+          Delete Listing
+        </button>
       </div>
     </div>
+  </div>
 
-    <script src="/javaScript/deleteMessage.js"></script>
-  </body>
+  <script src="/javaScript/deleteMessage.js"></script>
+</body>

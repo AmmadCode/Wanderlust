@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 // Joi schema for listing validation
-const listingSchema = Joi.object({
+module.exports.listingSchema = Joi.object({
     listing: Joi.object({
         title: Joi.string()
             .required()
@@ -119,4 +119,28 @@ const listingSchema = Joi.object({
     }).required()
 });
 
-module.exports = { listingSchema };
+module.exports.reviewSchema = Joi.object({
+    review: Joi.object({
+        rating: Joi.number()
+            .required()
+            .min(1)
+            .max(5)
+            .messages({
+                'number.base': 'Rating must be a number',
+                'number.min': 'Rating must be at least 1',
+                'number.max': 'Rating must be at most 5',
+                'any.required': 'Rating is required'
+            }),
+        comment: Joi.string()
+            .required()
+            .trim()
+            .min(1)
+            .max(1000)
+            .messages({
+                'string.empty': 'Comment is required',
+                'string.min': 'Comment must not be empty',
+                'string.max': 'Comment must be less than 1000 characters',
+                'any.required': 'Comment is required'
+            })
+    }).required()
+});
