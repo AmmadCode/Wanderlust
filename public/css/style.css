@@ -1060,3 +1060,90 @@ input[type="number"].form-control::-webkit-inner-spin-button {
   25% { transform: translateX(-5px); }
   75% { transform: translateX(5px); }
 }
+
+/* ========================================
+   REVIEW SECTION STYLES
+   ======================================== */
+
+.review-section-title {
+    font-size: 1.75rem;
+    color: #2d3436;
+}
+
+.review-card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-2px);
+}
+
+.review-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.review-avatar i {
+    font-size: 1.25rem;
+    color: #adb5bd;
+}
+
+.review-author {
+    font-weight: 600;
+    color: #2d3436;
+    font-size: 1.1rem;
+}
+
+.review-rating {
+    margin-top: 0.25rem;
+}
+
+.review-rating i {
+    color: #ffc107;
+    font-size: 0.9rem;
+    margin-right: 0.1rem;
+}
+
+.review-comment {
+    color: #4a5568;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.btn-delete-review {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    color: #cbd5e0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.btn-delete-review:hover {
+    color: #fe424d;
+    transform: scale(1.1);
+}
+
+.review-delete-form {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+/* Ensure proper spacing in the header section */
+.d-flex.align-items-center.gap-3 {
+    height: 100%;
+}
+
