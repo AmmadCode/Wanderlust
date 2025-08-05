@@ -1,16 +1,14 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listing.js");
-const Review = require("./models/review.js");
-const { listingSchema, reviewSchema } = require("./schema.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const wrapAsync = require('./utils/wrapAsync');
-const ExpressError = require('./utils/ExpressError');
+const ExpressError = require("./utils/ExpressError");
 
+const listings = require("./routes/listing.js");
+const reviews = require("./routes/review.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -26,144 +24,26 @@ const cluster = process.env.MONGODB_CLUSTER;
 const database = process.env.MONGODB_DATABASE;
 const connectionString = `mongodb+srv://${username}:${password}@${cluster}/${database}?retryWrites=true&w=majority&appName=Cluster0`;
 
-mongoose.connect(connectionString)
+mongoose
+  .connect(connectionString)
   .then(() => {
-    console.log('Successfully connected to MongoDB Atlas!');
+    console.log("Successfully connected to MongoDB Atlas!");
   })
   .catch((error) => {
-    console.error('Error connecting to MongoDB Atlas:', error);
+    console.error("Error connecting to MongoDB Atlas:", error);
   });
 
-// Validate Listing
-const validateListing = (req, res, next) => {
-  // Validate request body using Joi schema (with type coercion enabled for price field)
-  const { error } = listingSchema.validate(req.body, {
-    allowUnknown: false,  // Don't allow unknown fields
-    stripUnknown: false   // Don't strip unknown fields, show error instead
-  });
-  if (error) {
-    const msg = error.details.map(el => el.message).join(', ');
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-
-}
-// validate Review
-const validateReview = (req, res, next) => {
-  // Validate request body using Joi schema
- const { error } = reviewSchema.validate(req.body, {
-    allowUnknown: false,  // Don't allow unknown fields
-    stripUnknown: false   // Don't strip unknown fields, show error instead
-  });
-
-  if (error) {
-    const msg = error.details.map(el => el.message).join(', ');
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-
-}
+app.use("/listings", listings);
+app.use("/listings/:id/reviews", reviews);
 
 // Root Route
 app.get("/", (req, res) => {
-  res.send("Hello I am root!")
+  res.send("Hello I am root!");
 });
-
-// Listings Routes
-
-// Index Route
-app.get("/listings", wrapAsync(async (req, res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index.ejs", { allListings })
-}));
-
-// New Route (GET for form)
-app.get("/listings/new", (req, res) => {
-  res.render("listings/new.ejs");
-})
-
-// Show Route
-app.get("/listings/:id", wrapAsync(async (req, res) => {
-  let { id } = req.params;
-  const listing = await Listing.findById(id).populate("reviews");
-  res.render("listings/show.ejs", { listing });
-}));
-
-// Create Route (POST)
-app.post("/listings", validateListing, wrapAsync(async (req, res, next) => {
-
-  // Create a new listing instance and save it to the database
-  const newListing = new Listing(req.body.listing);
-  await newListing.save();
-  console.log("New Listing Created");
-  res.redirect("/listings");
-
-}));
-
-// Edit Route (GET for form)
-app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
-  let { id } = req.params;
-  const listing = await Listing.findById(id);
-  res.render("listings/edit.ejs", { listing });
-}));
-
-// Update Route (PUT)
-app.put("/listings/:id", validateListing, wrapAsync(async (req, res) => {
-  // Find the listing by ID and update it with the new data
-  const { id } = req.params;
-  const updatedListing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }, { new: true });
-  console.log("Listing Updated");
-  res.redirect(`/listings/${id}`);
-}));
-
-// Delete Route (DELETE)
-
-app.delete("/listings/:id", wrapAsync(async (req, res) => {
-  const { id } = req.params;
-  await Listing.findByIdAndDelete(id);
-  console.log("Listing Deleted");
-  res.redirect("/listings");
-}));
-
-
-// Reviews Routes
-app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
-  const { id } = req.params;
-  const listing = await Listing.findById(id);
-  const review = new Review(req.body.review);
-  listing.reviews.push(review);
-  await review.save();
-  // Save the updated listing with the new review
-  await listing.save();
-  console.log("Review Created");
-  res.redirect(`/listings/${id}`);
-}));
-
-// Delete Review Route
-app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
-  let { id, reviewId } = req.params;
-  await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-  await Review.findByIdAndDelete(reviewId);
-  console.log("Review Deleted");
-  res.redirect(`/listings/${id}`);
-}));
-
-
-
-
-
-
-
-
 
 app.use((req, res, next) => {
   next(new ExpressError("Page Not Found!", 404));
-})
-
-
-
+});
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
@@ -171,12 +51,8 @@ app.use((err, req, res, next) => {
   // res.status(statusCode).send(message);
 
   res.status(statusCode).render("listings/error.ejs", { message });
-
-})
-
-
-
+});
 
 app.listen(8080, () => {
-  console.log('Server is listing on port 8080');
-})
+  console.log("Server is listing on port 8080");
+});
