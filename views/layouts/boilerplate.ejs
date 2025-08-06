@@ -28,8 +28,10 @@
 
   <body>
     <%- include('../includes/navbar') %>
-    <div class="container"><%- body %></div>
-
+    <%- include('../includes/flash') %>
+    <div class="container">
+      <%- body %>
+    </div>
     <%- include('../includes/footer') %>
 
     <script
@@ -39,7 +41,5 @@
     ></script>
 
     <script src="/javaScript/script.js"></script>
-
-
   </body>
 </html>
