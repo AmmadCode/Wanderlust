@@ -16,8 +16,13 @@
 
           <!-- Listing Content -->
           <div class="detail-content">
+            <!-- Owner Info -->
+            <h5 class="mb-5">
+              <i class="fa-solid fa-user"></i><%= listing.owner.username %>
+            </h5>
             <!-- Title -->
-            <h2 class="detail-title"><%= listing.title.trim() %></h2>
+
+            <h2 class="detail-title mt-3"><%= listing.title.trim() %></h2>
 
             <!-- Description -->
             <p class="detail-description"><%= listing.description.trim() %></p>
@@ -37,6 +42,7 @@
             </div>
 
             <!-- Action Buttons -->
+            <% if(currentUser && listing.owner._id.equals(currentUser._id)) { %>
             <div class="detail-buttons">
               <a
                 href="/listings/<%= listing._id %>/edit"
@@ -60,11 +66,15 @@
                 </button>
               </form>
             </div>
+
+            <% } %>
           </div>
         </div>
       </div>
+
       <div class="col-lg-8 col-md-10 m-4">
         <hr class="p-3" />
+        <% if(currentUser) { %>
         <h4 class="mb-4">Leave a Review</h4>
         <form
           action="/listings/<%= listing._id %>/reviews"
@@ -102,8 +112,10 @@
             </button>
           </div>
         </form>
+         <hr />
+        <% } %>
 
-        <hr />
+       
         <h4 class="review-section-title fw-bold mb-3">All Reviews</h4>
         <p class="text-muted mb-4"><%= listing.reviews.length %> reviews</p>
 
@@ -116,32 +128,32 @@
                   <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="ms-3">
-                  <h6 class="review-author mb-0">John Doe</h6>
+                  <h6 class="review-author mb-0"><%= review.author.username %> </h6>
                   <div class="review-rating">
                     <% for(let i = 0; i < review.rating; i++) { %>
-                      <i class="fa-solid fa-star"></i>
-                    <% } %>
-                    <% for(let i = review.rating; i < 5; i++) { %>
-                      <i class="fa-regular fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <% } %> <% for(let i = review.rating; i < 5; i++) { %>
+                    <i class="fa-regular fa-star"></i>
                     <% } %>
                   </div>
                 </div>
               </div>
               <div class="d-flex align-items-center gap-3">
                 <small class="text-muted">
-                  <%= review.createdAt.toLocaleDateString("en-US", { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  }) %>
+                  <%= review.createdAt.toLocaleDateString("en-US", { year:
+                  'numeric', month: 'long', day: 'numeric' }) %>
                 </small>
-                <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" 
-                      method="POST" 
-                      class="review-delete-form">
+                <% if(currentUser) { %>
+                <form
+                  action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                  method="POST"
+                  class="review-delete-form"
+                >
                   <button class="btn-delete-review" type="submit">
                     <i class="fa-solid fa-trash-can"></i>
                   </button>
                 </form>
+                <% } %>
               </div>
             </div>
             <p class="review-comment mb-0"><%= review.comment %></p>
