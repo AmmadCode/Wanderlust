@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -44,8 +45,24 @@ mongoose
     console.error("Error connecting to MongoDB Atlas:", error);
   });
 
+
+
+// Session
+const store = MongoStore.create({
+  mongoUrl: connectionString,
+  crypto: {
+    secret: process.env.SESSION_SECRET,
+  },
+  touchAfter: 24 * 3600, // 24 hours
+});  
+
+store.on("error", function (e) {
+  console.log("Session store error:", e);
+});
+
 // Session Configuration
 const sessionOptions = {
+  store,
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
@@ -55,6 +72,9 @@ const sessionOptions = {
     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
   },
 };
+
+
+
 
 app.use(session(sessionOptions));
 app.use(flash());
