@@ -276,7 +276,24 @@ Then update `package.json`:
 - Add comments for complex logic
 - Ensure responsive design
 
-### Sample Images
+### 📸 Sample Images
+
+<p align="center">
+  <img src="https://res.cloudinary.com/dypudy94h/image/upload/v1755252232/Screen_Shot_2025-08-15_at_14.12.19_ozujjd.png" alt="Wanderlust Screenshot 1" width="45%">
+  &nbsp;
+  <img src="https://res.cloudinary.com/dypudy94h/image/upload/v1755252234/Screen_Shot_2025-08-15_at_14.13.33_mf9ejc.png" alt="Wanderlust Screenshot 2" width="45%">
+</p>
+
+<p align="center">
+  <img src="https://res.cloudinary.com/dypudy94h/image/upload/v1755252223/Screen_Shot_2025-08-15_at_14.12.56_mfow0w.png" alt="Wanderlust Screenshot 3" width="45%">
+  &nbsp;
+  <img src="https://res.cloudinary.com/dypudy94h/image/upload/v1755252209/Screen_Shot_2025-08-15_at_14.13.54_e3bwp8.png" alt="Wanderlust Screenshot 4" width="45%">
+</p>
+
+<p align="center">
+  <img src="https://res.cloudinary.com/dypudy94h/image/upload/v1755252209/Screen_Shot_2025-08-15_at_14.13.43_ijvlt8.png" alt="Wanderlust Screenshot 5" width="45%">
+</p>
+
 
 
 ## 📝 License
