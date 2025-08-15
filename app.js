@@ -13,6 +13,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/user.js");
 
+
+
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
@@ -24,6 +26,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
+
+
 
 // MongoDB Connection
 const username = process.env.MONGODB_USERNAME;
@@ -41,6 +45,8 @@ mongoose
     console.error("Error connecting to MongoDB Atlas:", error);
   });
 
+
+
 // Session
 const store = MongoStore.create({
   mongoUrl: connectionString,
@@ -48,7 +54,7 @@ const store = MongoStore.create({
     secret: process.env.SESSION_SECRET,
   },
   touchAfter: 24 * 3600, // 24 hours
-});
+});  
 
 store.on("error", function (e) {
   console.log("Session store error:", e);
@@ -64,9 +70,11 @@ const sessionOptions = {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-    secure: process.env.NODE_ENV === "production", // secure only in production
   },
 };
+
+
+
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -86,6 +94,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
@@ -104,7 +113,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("listings/error.ejs", { message });
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(8080, () => {
+  console.log("Server is listing on port 8080");
 });
