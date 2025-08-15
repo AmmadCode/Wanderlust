@@ -279,7 +279,7 @@ Then update `package.json`:
 ### 📸 Sample Images
 
 <p align="center">
-  <img src="https://res.cloudinary.com/dypudy94h/image/upload/v1755252232/Screen_Shot_2025-08-15_at_14.12.19_ozujjd.png" alt="Wanderlust Screenshot 1" width="30%" style="margin: 10px;">
+  <img src="[https://res.cloudinary.com/dypudy94h/image/upload/v1755252232/Screen_Shot_2025-08-15_at_14.12.19_ozujjd.png](https://res.cloudinary.com/dypudy94h/image/upload/v1755252232/Screen_Shot_2025-08-15_at_14.12.19_ozujjd.png)" alt="Wanderlust Screenshot 1" style="margin: 10px;">
 </p>
 
 <p align="center">
