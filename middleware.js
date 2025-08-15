@@ -1,11 +1,11 @@
 const Listing = require("./models/listing");
 const Review = require("./models/review");
 const ExpressError = require("./utils/ExpressError");
-const { listingSchema,  reviewSchema  } = require("./schema.js");
+const { listingSchema, listingUpdateSchema, reviewSchema } = require("./schema.js");
 
 
 module.exports.isLoggedIn = (req, res, next) => {
-    console.log(req.user);
+    
   if (!req.isAuthenticated()) {
     //redirect url save
    req.session.redirectUrl = req.path.includes('/reviews/') 
@@ -40,18 +40,32 @@ module.exports.isOwner = async (req,res, next) => {
 
 // Validate Listing
 module.exports.validateListing = (req, res, next) => {
-  // Validate request body using Joi schema (with type coercion enabled for price field)
-  const { error } = listingSchema.validate(req.body, {
-    allowUnknown: false,  // Don't allow unknown fields
-    stripUnknown: false   // Don't strip unknown fields, show error instead
+  
+
+  // For new listings, image file is required
+  if (req.method === 'POST' && !req.file) {
+    throw new ExpressError('Image file is required for new listings', 400);
+  }
+  
+  // Prepare validation data
+  let validationData = { ...req.body };
+  
+  // Use appropriate schema based on request method
+  const schema = req.method === 'POST' ? listingSchema : listingUpdateSchema;
+  
+  // Validate request body using Joi schema
+  const { error } = schema.validate(validationData, {
+    allowUnknown: false,
+    stripUnknown: false
   });
+  
   if (error) {
+    
     const msg = error.details.map(el => el.message).join(', ');
     throw new ExpressError(msg, 400);
   } else {
     next();
   }
-
 }
 
 

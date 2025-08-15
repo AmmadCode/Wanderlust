@@ -13,9 +13,11 @@ const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/user.js");
 
 
+
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const resetPasswordRouter = require("./routes/resetPassword.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -23,6 +25,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
+
+
 
 // MongoDB Connection
 const username = process.env.MONGODB_USERNAME;
@@ -42,20 +46,15 @@ mongoose
 
 // Session Configuration
 const sessionOptions = {
-  secret: "MySecretKey",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie : {
+  cookie: {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-  }
+  },
 };
-
-// Root Route
-app.get("/", (req, res) => {
-  res.send("Hello I am root!");
-});
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -68,7 +67,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -76,23 +74,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.get("/demo", async(req, res) => {
-//    let fakeUser = new User({
-//     email : "test@example.com",
-//     username: "testuser"
-//    });
-
-//     let registeredUser = await User.register(fakeUser, "password123");
-//     res.send(registeredUser);
-// });
-
-
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
-
-
+app.use("/", resetPasswordRouter);
 
 // 404 Error Handling Middleware
 app.use((req, res, next) => {

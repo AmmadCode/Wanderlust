@@ -2,51 +2,72 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
 
-const defaultImage = {
-  url: "https://images.unsplash.com/photo-1627283391728-701007067e7e?q=80&w=464&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  filename: "default"
-};
+// Define category enum
+const categoryEnum = [
+  "trending",
+  "rooms",
+  "iconic-cities",
+  "mountains",
+  "castle",
+  "pools",
+  "camping",
+  "farmhouse",
+  "arctic",
+  "boats",
+  "deserts",
+];
 
 const listingSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: String,
   image: {
-    url: {
-      type: String,
-      set: v => v === "" ? defaultImage.url : v
-    },
-    filename: {
-      type: String,
-      set: v => v === "" ? defaultImage.filename : v
-    }
+    url: String,
+    filename: String,
   },
   price: Number,
   location: String,
   country: String,
-  reviews: [{
-    type: Schema.Types.ObjectId,
-    ref: "Review"
-  }],
+  category: {
+    type: String,
+    enum: categoryEnum,
+    default: "rooms",
+    required: true,
+  },
+  coordinates: {
+    lat: {
+      type: Number,
+      default: null,
+    },
+    lng: {
+      type: Number,
+      default: null,
+    },
+  },
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
   owner: {
     type: Schema.Types.ObjectId,
-    ref: "User"
-  }
+    ref: "User",
+  },
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {
   if (listing) {
     await Review.deleteMany({
       _id: {
-        $in: listing.reviews
-      }
+        $in: listing.reviews,
+      },
     });
     console.log("Reviews deleted for listing:", listing._id);
   }
-
-})
+});
 
 const Listing = mongoose.model("Listing", listingSchema);
 module.exports = Listing;

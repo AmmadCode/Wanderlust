@@ -1,12 +1,183 @@
 <% layout('layouts/boilerplate') %>
 
+<div class="filter-wrapper">
+  <!-- Left Arrow -->
+  <button
+    class="scroll-arrow left"
+    onclick="scrollFilters('left')"
+    id="leftArrow"
+  >
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
 
+  <div id="filters">
+    <button class="mobile-filter-btn" onclick="toggleMobileFilters()">
+      <i class="fa-solid fa-filter"></i>
+      Filters
+    </button>
 
-<h1>All Listings</h1>
-<!-- <form  method="GET" action="/listings/new">
-        <button>Create New Listing</button>
-    </form> -->
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4">
+    <div class="filter-items">
+      <div
+        class="filter"
+        data-filter="trending"
+        data-tooltip="Trending destinations"
+      >
+        <i class="fa-solid fa-fire"></i>
+        <p>Trending</p>
+      </div>
+      <div class="filter" data-filter="rooms" data-tooltip="Comfortable rooms">
+        <i class="fa-solid fa-bed"></i>
+        <p>Rooms</p>
+      </div>
+      <div
+        class="filter"
+        data-filter="iconic-cities"
+        data-tooltip="Famous cities"
+      >
+        <i class="fa-solid fa-mountain-city"></i>
+        <p>Iconic cities</p>
+      </div>
+      <div class="filter" data-filter="mountains" data-tooltip="Mountain views">
+        <i class="fa-solid fa-mountain"></i>
+        <p>Mountains</p>
+      </div>
+      <div class="filter" data-filter="castle" data-tooltip="Historic castles">
+        <i class="fa-brands fa-fort-awesome"></i>
+        <p>Castle</p>
+      </div>
+      <div class="filter" data-filter="pools" data-tooltip="Amazing pools">
+        <i class="fa-solid fa-person-swimming"></i>
+        <p>Amazing Pools</p>
+      </div>
+      <div class="filter" data-filter="camping" data-tooltip="Outdoor camping">
+        <i class="fa-solid fa-campground"></i>
+        <p>Camping</p>
+      </div>
+      <div
+        class="filter"
+        data-filter="farmhouse"
+        data-tooltip="Rural farmhouses"
+      >
+        <i class="fa-solid fa-cow"></i>
+        <p>Farmhouse</p>
+      </div>
+      <div class="filter" data-filter="arctic" data-tooltip="Arctic adventures">
+        <i class="fa-solid fa-snowflake"></i>
+        <p>Arctic</p>
+      </div>
+      <div class="filter" data-filter="boats" data-tooltip="Boat stays">
+        <i class="fa-solid fa-ship"></i>
+        <p>Boats</p>
+      </div>
+      <div class="filter" data-filter="deserts" data-tooltip="Desert escapes">
+        <i class="fa-solid fa-sun"></i>
+        <p>Deserts</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Arrow -->
+  <button
+    class="scroll-arrow right"
+    onclick="scrollFilters('right')"
+    id="rightArrow"
+  >
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+</div>
+
+<!-- Mobile Filter Dropdown - Outside filter wrapper for proper positioning -->
+<div class="mobile-filter-dropdown" id="mobileFilterDropdown">
+  <div class="mobile-filter-item" data-filter="trending">
+    <i class="fa-solid fa-fire"></i>
+    <span>Trending</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="rooms">
+    <i class="fa-solid fa-bed"></i>
+    <span>Rooms</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="iconic-cities">
+    <i class="fa-solid fa-mountain-city"></i>
+    <span>Iconic cities</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="mountains">
+    <i class="fa-solid fa-mountain"></i>
+    <span>Mountains</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="castle">
+    <i class="fa-brands fa-fort-awesome"></i>
+    <span>Castle</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="pools">
+    <i class="fa-solid fa-person-swimming"></i>
+    <span>Amazing Pools</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="camping">
+    <i class="fa-solid fa-campground"></i>
+    <span>Camping</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="farmhouse">
+    <i class="fa-solid fa-cow"></i>
+    <span>Farmhouse</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="arctic">
+    <i class="fa-solid fa-snowflake"></i>
+    <span>Arctic</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="boats">
+    <i class="fa-solid fa-ship"></i>
+    <span>Boats</span>
+  </div>
+  <div class="mobile-filter-item" data-filter="deserts">
+    <i class="fa-solid fa-sun"></i>
+    <span>Deserts</span>
+  </div>
+</div>
+
+<!-- Active Filters Display -->
+<% if (locals.currentSearch || locals.currentCategory) { %>
+<div class="active-filters-container">
+  <div class="active-filters">
+    <% if (locals.currentSearch) { %>
+    <div class="active-filter-tag">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span>Country: <%= currentSearch %></span>
+      <button onclick="removeSearchFilter()" class="remove-filter">
+        <i class="fa-solid fa-times"></i>
+      </button>
+    </div>
+    <% } %> <% if (locals.currentCategory) { %>
+    <div class="active-filter-tag">
+      <i class="fa-solid fa-filter"></i>
+      <span
+        >Category: <%= currentCategory.replace(/-/g, ' ').replace(/\b\w/g, l =>
+        l.toUpperCase()) %></span
+      >
+      <button onclick="removeCategoryFilter()" class="remove-filter">
+        <i class="fa-solid fa-times"></i>
+      </button>
+    </div>
+    <% } %>
+
+    <button onclick="clearAllFilters()" class="clear-all-btn">
+      Clear All Filters
+    </button>
+  </div>
+</div>
+<% } %>
+
+<!-- No Results Message -->
+<% if (allListings.length === 0) { %>
+<div class="no-results">
+  <i class="fa-solid fa-search"></i>
+  <h3>No listings found</h3>
+  <p>Try adjusting your filters or search terms</p>
+  <button onclick="clearAllFilters()" class="btn add-btn">Clear Filters</button>
+</div>
+<% } %>
+
+<!-- Listings Grid -->
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 mt-2">
   <% for(let listing of allListings) { %>
   <div class="col">
     <a href="/listings/<%= listing._id %>" class="listing-link">
@@ -37,11 +208,4 @@
   <% } %>
 </div>
 
-<!-- <ul>
-    <% for(let listing of allListings) { %>
-    <li>
-      <a href="/listings/<%= listing.id %>"> <%= listing.title %> </a>
-    </li>
-
-    <% } %>
-  </ul> -->
+<script src="/javaScript/filter.js"></script>

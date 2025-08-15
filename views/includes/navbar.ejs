@@ -1,33 +1,258 @@
+<style>
+  /* Search Container - Seamless Design */
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 420px;
+    margin: 0 1rem;
+    background: white;
+    border-radius: 50px;
+    border: 2px solid #e9ecef;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .search-container:focus-within {
+    border-color: #fe424d;
+    box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.1);
+    transform: translateY(-1px);
+  }
+
+  /* Search Input - Seamless Integration */
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 0 0.75rem 3rem;
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #2d3436;
+    transition: all 0.3s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+  }
+
+  .search-input::placeholder {
+    color: #6c757d;
+    font-weight: 400;
+  }
+
+  /* Search Icon */
+  .search-icon {
+    position: absolute;
+    left: 1.2rem;
+    color: #6c757d;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+
+  .search-container:focus-within .search-icon {
+    color: #fe424d;
+  }
+
+  /* Search Button - Integrated Design */
+  .btn-search {
+    background: #fe424d;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    margin: 0;
+    height: 100%;
+  }
+
+  .btn-search:hover {
+    background: #fd2935;
+  }
+
+  .btn-search:active {
+    background: #e22e3a;
+  }
+
+  .btn-search i {
+    font-size: 0.9rem;
+  }
+
+  /* Search Form */
+  .search-form {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 991px) {
+    .search-container {
+      max-width: 100%;
+      margin: 1rem 0;
+    }
+
+    .search-form {
+      width: 100%;
+      order: -1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .search-container {
+      max-width: 100%;
+      margin: 0.75rem 0;
+    }
+
+    .search-input {
+      padding: 0.65rem 0 0.65rem 2.5rem;
+      font-size: 0.9rem;
+    }
+
+    .search-icon {
+      left: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .btn-search {
+      padding: 0.65rem 1.2rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-search span {
+      display: none;
+    }
+
+    .btn-search i {
+      margin: 0;
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .search-container {
+      margin: 0.5rem 0;
+      border-radius: 40px;
+    }
+
+    .search-input {
+      padding: 0.6rem 0 0.6rem 2.2rem;
+      font-size: 0.85rem;
+    }
+
+    .search-icon {
+      left: 0.8rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-search {
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  /* Dark Mode Support */
+  .dark .search-container {
+    background: #2d2d2d;
+    border-color: #404040;
+  }
+
+  .dark .search-container:focus-within {
+    border-color: #fe424d;
+    box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.15);
+  }
+
+  .dark .search-input {
+    color: #ffffff;
+  }
+
+  .dark .search-input::placeholder {
+    color: #b3b3b3;
+  }
+
+  .dark .search-icon {
+    color: #b3b3b3;
+  }
+
+  .dark .search-container:focus-within .search-icon {
+    color: #fe424d;
+  }
+
+  .dark .btn-search {
+    background: #fe424d;
+  }
+
+  .dark .btn-search:hover {
+    background: #fd2935;
+  }
+
+  /* Smooth hover effect on container */
+  .search-container:hover {
+    border-color: #ddd;
+  }
+
+  .search-container:hover .search-icon {
+    color: #495057;
+  }
+
+  /* Animation for search expansion on focus */
+  @media (min-width: 992px) {
+    .search-container {
+      transition: all 0.3s ease;
+    }
+
+    .search-container:focus-within {
+      max-width: 480px;
+    }
+  }
+</style>
+
+
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/listings">
       <i class="fa-solid fa-compass-drafting"></i>
       <span class="brand-name">WanderLust</span>
     </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/listings">All Listings</a>
-        <a class="nav-link" href="/listings/new">Add new listing</a>
+        <a class="nav-link" href="/listings">Explore</a>
+
+      </div>
+      <div class="navbar-nav ms-auto search-form">
+        <form class="search-container" role="search" method="GET" action="/listings">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input class="search-input" type="search" name="search" placeholder="Search destinations..."
+            aria-label="Search">
+          <button class="btn btn-search" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search
+          </button>
+        </form>
       </div>
       <div class="navbar-nav ms-auto">
-       <% if(!currentUser) { %>
-        <a class="nav-link auth-btn signup-btn" href="/signup">Sign Up</a>
-        <a class="nav-link auth-btn login-btn" href="/login">Log In</a>
-        <% } %>
+        <a class="nav-link" href="/listings/new">Add new listing</a>
+        <% if(!currentUser) { %>
+          <a class="nav-link auth-btn signup-btn" href="/signup">Sign Up</a>
+          <a class="nav-link auth-btn login-btn" href="/login">Log In</a>
+          <% } %>
 
-        <% if(currentUser) { %>
-        <span class="navbar-text me-3">Welcome, <%= currentUser.username %>!</span>
-        <a class="nav-link auth-btn logout-btn" href="/logout">Log Out</a>
-        <% } %>
+            <% if(currentUser) { %>
+              <span class="navbar-text me-3">Welcome, <%= currentUser.username %>!</span>
+              <a class="nav-link auth-btn logout-btn" href="/logout">Log Out</a>
+              <% } %>
       </div>
     </div>
   </div>

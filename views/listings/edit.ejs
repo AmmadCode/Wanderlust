@@ -1,109 +1,124 @@
 <% layout('layouts/boilerplate') %>
-<body>
-  <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
-    <div class="row">
-      <div class="col-8 offset-2">
-        <h3>Edit Listing</h3>
-        <div class="mb-3">
-          <label for="title" class="form-label">Title</label>
-          <input
-            type="text"
-            class="form-control"
-            id="title"
-            name="listing[title]"
-            value="<%= listing.title %>"
-            minlength="1"
-            maxlength="100"
-            pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s\-',\.#\/]+$"
-            title="Title must describe the property and contain at least some letters (e.g., '2-Bedroom Apartment', 'Luxury Villa')"
-            required
-          />
-          <div class="valid-feedback">Title Looks good!</div>
-          <div class="invalid-feedback">Title must describe the property and contain at least some letters</div>
-        </div>
-        <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
-          <textarea
-            class="form-control"
-            id="description"
-            name="listing[description]"
-            minlength="1"
-            maxlength="1000"
-            title="Description must be between 1 and 1000 characters"
-            required
-          ><%= listing.description.trim() %></textarea>
-          <div class="valid-feedback">Description Looks good!</div>
-          <div class="invalid-feedback">Description must be between 1 and 1000 characters</div>
-        </div>
-        <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
-          <input
-            type="url"
-            class="form-control"
-            id="image"
-            name="listing[image][url]"
-            value="<%= listing.image.url %>"
-            placeholder="Optional"
-            pattern="https?://.+"
-            title="Please enter a valid URL starting with http:// or https://"
-            required
-          />
-          <div class="valid-feedback">Image URL Looks good!</div>
-          <div class="invalid-feedback">Please enter a valid URL starting with http:// or https://</div>
-        </div>
-        <div class="row">
-          <div class="mb-3 col-md-4">
-            <label for="price" class="form-label">Price</label>
-            <input
-              type="number"
-              class="form-control"
-              id="price"
-              name="listing[price]"
-              value="<%= listing.price %>"
-              min="0.01"
-              step="0.01"
-              pattern="^\d+(\.\d{1,2})?$"
-              title="Price must be a positive number (e.g., 25.99)"
-              required
-            />
-            <div class="valid-feedback">Price Looks good!</div>
-            <div class="invalid-feedback">Price must be a positive number (e.g., 25.99)</div>
-          </div>
-          <div class="mb-3 col-md-8">
-            <label for="location" class="form-label">Location</label>
-            <input
-              type="text"
-              class="form-control"
-              id="location"
-              name="listing[location]"
-              value="<%= listing.location %>"
-              pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s\-',\.#\/]+$"
-              title="Location can include numbers and letters (e.g., '123 Main St, Apt 5B') but cannot be just numbers"
-              required
-            />
-            <div class="valid-feedback">Location Looks good!</div>
-            <div class="invalid-feedback">Location can include numbers and letters but cannot be just numbers</div>
-          </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="country" class="form-label">Country</label>
-          <input
-            type="text"
-            class="form-control"
-            id="country"
-            name="listing[country]"
-            value="<%= listing.country %>"
-            pattern="[a-zA-Z\s\-',\.]+"
-            title="Country must contain only letters, spaces, hyphens, apostrophes, commas, and periods"
-            required
-          />
-          <div class="valid-feedback">Country Looks good!</div>
-          <div class="invalid-feedback">Country must contain only letters, spaces, hyphens, apostrophes, commas, and periods</div>
+  <body>
+    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="needs-validation" novalidate
+      enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-8 offset-2">
+          <h3>Edit Listing</h3>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="listing[title]" value="<%= listing.title %>"
+              minlength="1" maxlength="100" pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s\-',\.#\/]+$"
+              title="Title must describe the property and contain at least some letters (e.g., '2-Bedroom Apartment', 'Luxury Villa')"
+              required />
+            <div class="valid-feedback">Title Looks good!</div>
+            <div class="invalid-feedback">Title must describe the property and contain at least some letters</div>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="listing[description]" minlength="1" maxlength="1000"
+              title="Description must be between 1 and 1000 characters"
+              required><%= listing.description.trim() %></textarea>
+            <div class="valid-feedback">Description Looks good!</div>
+            <div class="invalid-feedback">Description must be between 1 and 1000 characters</div>
+          </div>
+          <div class="mb-3">
+            <label for="image" class="form-label">Update Image (Optional)</label>
+            <input type="file" class="form-control" id="image" name="listing[image]" accept="image/*"
+              onchange="validateFileSize(this)" />
+            <small class="form-text text-muted">Leave empty to keep current image. Max size: 5MB</small>
+
+            <!-- Show current image -->
+            <!-- Show current image -->
+            <% if (listing.image && listing.image.url) { %>
+              <div class="edit-image-container">
+                <p class="mb-2"><strong>Current Image:</strong></p>
+                <picture class="edit-image-picture">
+                  <!-- Mobile -->
+                  <source media="(max-width: 576px)" srcset="<%= originalImageUrl %>?w=400 400w,
+                      <%= originalImageUrl %>?w=800 800w" sizes="100vw">
+                  <!-- Tablet -->
+                  <source media="(max-width: 768px)" srcset="<%= originalImageUrl %>?w=600 600w,
+                      <%= originalImageUrl %>?w=1200 1200w" sizes="100vw">
+                  <!-- Desktop -->
+                  <img src="<%= originalImageUrl %>" alt="Current image of <%= listing.title %>"
+                    class="edit-current-image" loading="lazy">
+                </picture>
+              </div>
+              <% } %>
+          </div>
+          <div class="row">
+            <div class="mb-3 col-md-4">
+              <label for="price" class="form-label">Price</label>
+              <input type="number" class="form-control" id="price" name="listing[price]" value="<%= listing.price %>"
+                min="0.01" step="0.01" pattern="^\d+(\.\d{1,2})?$" title="Price must be a positive number (e.g., 25.99)"
+                required />
+              <div class="valid-feedback">Price Looks good!</div>
+              <div class="invalid-feedback">Price must be a positive number (e.g., 25.99)</div>
+            </div>
+            <div class="mb-3 col-md-8">
+              <label for="location" class="form-label">Location</label>
+              <input type="text" class="form-control" id="location" name="listing[location]"
+                value="<%= listing.location %>" pattern="^(?=.*[a-zA-Z])[a-zA-Z0-9\s\-',\.#\/]+$"
+                title="Location can include numbers and letters (e.g., '123 Main St, Apt 5B') but cannot be just numbers"
+                required />
+              <div class="valid-feedback">Location Looks good!</div>
+              <div class="invalid-feedback">Location can include numbers and letters but cannot be just numbers</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input type="text" class="form-control" id="country" name="listing[country]" value="<%= listing.country %>"
+              pattern="[a-zA-Z\s\-',\.]+"
+              title="Country must contain only letters, spaces, hyphens, apostrophes, commas, and periods" required />
+            <div class="valid-feedback">Country Looks good!</div>
+            <div class="invalid-feedback">Country must contain only letters, spaces, hyphens, apostrophes, commas, and
+              periods</div>
+          </div>
+          <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-control" name="listing[category]" id="category" required>
+              <option value="" disabled>Select a category</option>
+              <option value="trending" <%=listing.category==='trending' ? 'selected' : '' %>>Trending</option>
+              <option value="rooms" <%=listing.category==='rooms' ? 'selected' : '' %>>Rooms</option>
+              <option value="iconic-cities" <%=listing.category==='iconic-cities' ? 'selected' : '' %>>Iconic Cities
+              </option>
+              <option value="mountains" <%=listing.category==='mountains' ? 'selected' : '' %>>Mountains</option>
+              <option value="castle" <%=listing.category==='castle' ? 'selected' : '' %>>Castle</option>
+              <option value="pools" <%=listing.category==='pools' ? 'selected' : '' %>>Amazing Pools</option>
+              <option value="camping" <%=listing.category==='camping' ? 'selected' : '' %>>Camping</option>
+              <option value="farmhouse" <%=listing.category==='farmhouse' ? 'selected' : '' %>>Farmhouse</option>
+              <option value="arctic" <%=listing.category==='arctic' ? 'selected' : '' %>>Arctic</option>
+              <option value="boats" <%=listing.category==='boats' ? 'selected' : '' %>>Boats</option>
+              <option value="deserts" <%=listing.category==='deserts' ? 'selected' : '' %>>Deserts</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary add-btn my-3">Edit</button>
         </div>
-        <button type="submit" class="btn btn-primary add-btn my-3">Edit</button>
       </div>
-    </div>
-  </form>
-  <!-- <script src="/javaScript/script.js"></script> -->
-</body>
+    </form>
+
+    <script>
+      function validateFileSize(input) {
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+          const fileSize = file.size / 1024 / 1024; // Convert to MB
+          const maxSize = 5; // 5MB limit
+
+          if (fileSize > maxSize) {
+            alert(`File size (${fileSize.toFixed(2)}MB) exceeds the maximum limit of ${maxSize}MB. Please choose a smaller file.`);
+            input.value = ''; // Clear the input
+            return false;
+          }
+
+          if (!file.type.startsWith('image/')) {
+            alert('Please select only image files (JPG, PNG, GIF, WebP).');
+            input.value = ''; // Clear the input
+            return false;
+          }
+        }
+      }
+    </script>
+  </body>

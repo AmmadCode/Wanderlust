@@ -1,6 +1,12 @@
 <% layout('layouts/boilerplate') %>
 <body>
-  <form action="/listings" method="POST" class="needs-validation" novalidate>
+  <form
+    action="/listings"
+    method="POST"
+    class="needs-validation"
+    novalidate
+    enctype="multipart/form-data"
+  >
     <div class="row">
       <div class="col-8 offset-2">
         <h3>Create a New Listing</h3>
@@ -21,7 +27,9 @@
           />
           <label for="title" class="form-label">Title</label>
           <div class="valid-feedback">Title Looks good!</div>
-          <div class="invalid-feedback">Title must describe the property and contain at least some letters</div>
+          <div class="invalid-feedback">
+            Title must describe the property and contain at least some letters
+          </div>
         </div>
 
         <!-- Description Input -->
@@ -38,23 +46,34 @@
           ></textarea>
           <label for="description" class="form-label">Description</label>
           <div class="valid-feedback">Description Looks good!</div>
-           <div class="invalid-feedback">Description must be between 1 and 1000 characters</div>
+          <div class="invalid-feedback">
+            Description must be between 1 and 1000 characters
+          </div>
         </div>
 
-        <!-- Image URL Input -->
-        <div class="form-group">
-          <input
-            type="url"
-            class="form-control"
-            id="image"
-            name="listing[image][url]"
-            placeholder=" "
-            pattern="https?://.+"
-            title="Please enter a valid URL starting with http:// or https://"
-          />
-          <label for="image" class="form-label">Image URL</label>
-          <div class="valid-feedback">Image URL Looks good!</div>
-          <div class="invalid-feedback">Please enter a valid URL starting with http:// or https://</div>
+        <!-- Image Upload Input -->
+        <div class="form-group file-upload-group">
+          <div class="file-upload-wrapper">
+            <input
+              type="file"
+              class="file-upload-input"
+              id="image"
+              name="listing[image]"
+              accept="image/*"
+              onchange="updateFileName(this)"
+              required
+            />
+            <label for="image" class="file-upload-label">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span class="file-upload-text">Choose Image</span>
+              <span class="file-upload-hint">or drag and drop (Max 5MB)</span>
+            </label>
+            <div class="file-name-display" id="fileNameDisplay"></div>
+          </div>
+          <div class="valid-feedback">Image file looks good!</div>
+          <div class="invalid-feedback">
+            Image is required! Please select an image file (Max 5MB)
+          </div>
         </div>
 
         <div class="row">
@@ -74,7 +93,9 @@
                 required
               />
               <label for="price" class="form-label">Price</label>
-              <div class="invalid-feedback">Price must be a positive number (e.g., 25.99)</div>
+              <div class="invalid-feedback">
+                Price must be a positive number (e.g., 25.99)
+              </div>
               <div class="valid-feedback">Price Looks good!</div>
             </div>
           </div>
@@ -93,7 +114,10 @@
                 required
               />
               <label for="location" class="form-label">Location</label>
-              <div class="invalid-feedback">Location can include numbers and letters but cannot be just numbers</div>
+              <div class="invalid-feedback">
+                Location can include numbers and letters but cannot be just
+                numbers
+              </div>
               <div class="valid-feedback">Location Looks good!</div>
             </div>
           </div>
@@ -112,12 +136,148 @@
             required
           />
           <label for="country" class="form-label">Country</label>
-           <div class="invalid-feedback">Country must contain only letters, spaces, hyphens, apostrophes, commas, and periods</div>
+          <div class="invalid-feedback">
+            Country must contain only letters, spaces, hyphens, apostrophes,
+            commas, and periods
+          </div>
           <div class="valid-feedback">Country Looks good!</div>
+        </div>
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select
+            class="form-control"
+            name="listing[category]"
+            id="category"
+            required
+          >
+            <option value="" disabled selected>Select a category</option>
+            <option value="trending">Trending</option>
+            <option value="rooms">Rooms</option>
+            <option value="iconic-cities">Iconic Cities</option>
+            <option value="mountains">Mountains</option>
+            <option value="castle">Castle</option>
+            <option value="pools">Amazing Pools</option>
+            <option value="camping">Camping</option>
+            <option value="farmhouse">Farmhouse</option>
+            <option value="arctic">Arctic</option>
+            <option value="boats">Boats</option>
+            <option value="deserts">Deserts</option>
+          </select>
         </div>
 
         <button type="submit" class="btn btn-dark add-btn">Add Listing</button>
       </div>
     </div>
   </form>
+
+  <script>
+    // File upload functionality with size validation
+    function updateFileName(input) {
+      const fileNameDisplay = document.getElementById("fileNameDisplay");
+      const fileUploadWrapper = input.closest(".file-upload-wrapper");
+      const fileUploadText =
+        fileUploadWrapper.querySelector(".file-upload-text");
+
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const fileName = file.name;
+        const fileSize = (file.size / 1024 / 1024).toFixed(2); // Convert to MB
+        const maxSize = 5; // 5MB limit
+
+        // Check file size
+        if (file.size > maxSize * 1024 * 1024) {
+          alert(
+            `File size (${fileSize}MB) exceeds the maximum limit of ${maxSize}MB. Please choose a smaller file.`
+          );
+          input.value = ""; // Clear the input
+          removeFile();
+          return;
+        }
+
+        // Check file type
+        if (!file.type.startsWith("image/")) {
+          alert("Please select only image files (JPG, PNG, GIF, WebP).");
+          input.value = ""; // Clear the input
+          removeFile();
+          return;
+        }
+
+        // Update file name display
+        fileNameDisplay.innerHTML = `
+          <div>
+            <i class="fas fa-file-image"></i>
+            <span>${fileName} (${fileSize} MB)</span>
+          </div>
+          <button type="button" class="remove-file" onclick="removeFile()">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+
+        fileNameDisplay.classList.add("show");
+        fileUploadWrapper.classList.add("has-file");
+        fileUploadText.textContent = "Change Image";
+      }
+    }
+
+    // Remove file function
+    function removeFile() {
+      const fileInput = document.getElementById("image");
+      const fileNameDisplay = document.getElementById("fileNameDisplay");
+      const fileUploadWrapper = fileInput.closest(".file-upload-wrapper");
+      const fileUploadText =
+        fileUploadWrapper.querySelector(".file-upload-text");
+
+      fileInput.value = "";
+      fileNameDisplay.classList.remove("show");
+      fileUploadWrapper.classList.remove("has-file");
+      fileUploadText.textContent = "Choose Image";
+    }
+
+    // Drag and drop functionality
+    document.addEventListener("DOMContentLoaded", function () {
+      const fileUploadLabel = document.querySelector(".file-upload-label");
+      const fileInput = document.getElementById("image");
+
+      // Prevent default drag behaviors
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        fileUploadLabel.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+      });
+
+      // Highlight drop area when item is dragged over it
+      ["dragenter", "dragover"].forEach((eventName) => {
+        fileUploadLabel.addEventListener(eventName, highlight, false);
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        fileUploadLabel.addEventListener(eventName, unhighlight, false);
+      });
+
+      // Handle dropped files
+      fileUploadLabel.addEventListener("drop", handleDrop, false);
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      function highlight(e) {
+        fileUploadLabel.classList.add("dragging");
+      }
+
+      function unhighlight(e) {
+        fileUploadLabel.classList.remove("dragging");
+      }
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+
+        if (files.length > 0) {
+          fileInput.files = files;
+          updateFileName(fileInput);
+        }
+      }
+    });
+  </script>
 </body>
