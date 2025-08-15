@@ -276,11 +276,11 @@ Then update `package.json`:
 - Add comments for complex logic
 - Ensure responsive design
 
-### 📸 Sample Images
 
-<p align="center">
-  <img src="[https://res.cloudinary.com/dypudy94h/image/upload/v1755252232/Screen_Shot_2025-08-15_at_14.12.19_ozujjd.png](https://res.cloudinary.com/dypudy94h/image/upload/v1755252232/Screen_Shot_2025-08-15_at_14.12.19_ozujjd.png)" alt="Wanderlust Screenshot 1" style="margin: 10px;">
-</p>
+
+### 📸 Sample Image
+![Wanderlust Screenshot](https://res.cloudinary.com/dypudy94h/image/upload/v1755252232/Screen_Shot_2025-08-15_at_14.12.19_ozujjd.png)
+
 
 <p align="center">
   <img src="https://res.cloudinary.com/dypudy94h/image/upload/v1755252234/Screen_Shot_2025-08-15_at_14.13.33_mf9ejc.png" alt="Wanderlust Screenshot 2" width="30%" style="margin: 10px;">
