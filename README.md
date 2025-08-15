@@ -283,7 +283,7 @@ Then update `package.json`:
 
 ![Wanderlust Screenshot](https://res.cloudinary.com/dypudy94h/image/upload/w_800,c_scale,q_auto,f_auto/v1755252223/Screen_Shot_2025-08-15_at_14.12.56_mfow0w.png)
 
-![Wanderlust Screenchoot](https://res.cloudinary.com/dypudy94h/image/upload/v1755252234/Screen_Shot_2025-08-15_at_14.13.33_mf9ejc.png)
+![Wanderlust Screenchoot](https://res.cloudinary.com/dypudy94h/image/upload/w_800,c_scale,q_auto,f_auto/v1755252234/Screen_Shot_2025-08-15_at_14.13.33_mf9ejc.png)
 
 
 
